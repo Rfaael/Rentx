@@ -31,12 +31,6 @@ class CreateCarSpecificationUseCase {
             specifications_id
         );
 
-        console.log("specification LOGADA A BAIXO");
-        console.log(specification);
-
-        console.log("TESTE LOGADO A BAIXO.....");
-        console.log(carExists);
-
         carExists.specifications = specification;
 
         await this.carsRepository.create(carExists);

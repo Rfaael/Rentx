@@ -13,11 +13,6 @@ import { v4 as uuid } from "uuid";
 import { Category } from "./Category";
 import { Specification } from "./Specification";
 
-const JoinTableCarsSpecification = {
-    name: "specifications_cars",
-    joinColumn: [{ name: "car_id" }],
-    inverseJoinColumns: [{ name: "specification_id" }],
-};
 @Entity("cars")
 class Car {
     @PrimaryColumn()
@@ -52,7 +47,11 @@ class Car {
     category_id: string;
 
     @ManyToMany(() => Specification)
-    @JoinTable(JoinTableCarsSpecification)
+    @JoinTable({
+        name: "specifications_cars",
+        joinColumns: [{ name: "car_id" }],
+        inverseJoinColumns: [{ name: "specification_id" }],
+    })
     specifications: Specification[];
 
     @CreateDateColumn()
