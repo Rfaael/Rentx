@@ -1,7 +1,8 @@
 import { NextFunction, Request, Response } from "express";
 import { verify } from "jsonwebtoken";
 
-import { UserRepository } from "@modules/accounts/infra/typeorm/repositories/UsersRepository";
+import auth from "@config/auth";
+import { UsersTokenRepository } from "@modules/accounts/infra/typeorm/repositories/UsersTokenRepository";
 import { AppError } from "@shared/errors/AppError";
 
 interface IPayLoad {
@@ -22,15 +23,8 @@ export async function ensureAuthenticate(
     const [, token] = authHeader.split(" ");
 
     try {
-        const { sub: user_id } = verify(token, "1234560") as IPayLoad;
+        const { sub: user_id } = verify(token, auth.secret_token) as IPayLoad;
 
-        const usersRepository = new UserRepository();
-
-        const user = usersRepository.findById(user_id);
-
-        if (!user) {
-            throw new AppError("User does not exists...", 401);
-        }
         request.user = {
             id: user_id,
         };
